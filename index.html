@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+
+<html class="translated-ltr">
+
+<head>
+
+<script src="js/jquery.min.js"></script>
+
+    <script>
+    function set_validator_errors(){
+        orderValidator.errorTitle = 'Παρακαλώ διορθώστε τα ακόλουθα λάθη'; 
+
+        orderValidator.errorNameField = 'Όνομα'; 
+        orderValidator.errorNameMess = 'Εισάγετε το όνομά σας'; 
+        
+        orderValidator.errorPhoneField = 'Αριθμός επικοινωνίας'; 
+        orderValidator.errorPhoneMess = 'Εισαγάγετε τον σωστό αριθμό τηλεφώνου'; 
+        
+        orderValidator.errorAddress = 'Εισαγάγετε τη σωστή διεύθυνση'; 
+        orderValidator.errorRequired = 'υποχρεωτικό πεδίο'; 
+        orderValidator.errorMaxLength = 'έγκυρος μέγιστος χαρακτήρας {1}'; 
+        orderValidator.errorMinLength = 'έγκυρος ελάχιστος χαρακτήρας {1}'; 
+        orderValidator.errorEmailField = 'E-mail';
+        orderValidator.errorEmail = 'Καθορίστηκε μη έγκυρο email';
+        }
+    </script>
+    
+<script>
+
+
+
+    
+    setOffer: function (offerId) {
+        if (offerId == this._setOfferId) {
+            return ;
+        }
+        this._setOfferId = offerId;
+        if (offerId) {
+            var offer = app.offers[offerId];
+            var previousOffer = app.currentOffer;
+            app.currentOffer = offer;
+            var event = this.jq.Event("offerchange");
+            event.previousOffer = previousOffer;
+            event.currentOffer = app.currentOffer;
+            this.jq(document).trigger(event);
+            this.updatePage(offer);
+        } else {
+            $('input[name=country]').val('');
+        }
+    },
+    
+    updatePage: function(offer) {
+        $('x-newprice').html(offer.price);
+        $('x-oldprice').html(offer.price2);
+        $('x-currency').html(offer.currency.name);
+        $('input[name=offer], select[name=offer]').val(offer.id);
+        $('input[name=country]').val(offer.country.code);
+    },
+
+    blockForm: function() {
+        // Блокируем кнопки при отправке формы
+        $('input[type=submit]', $(this)).prop( 'disabled', true ).attr( 'disabled', true );
+        $('button', $(this)).prop( 'disabled', true ).attr( 'disabled', true );
+        app.incompleteOrder.lock = true;
+        clearTimeout(app.incompleteOrder.timer);
+    },
+
+    unblockForm: function() {
+        $('input[type=submit]', $(this)).prop( 'disabled', false ).attr( 'disabled', false );
+        $('button[type=submit]', $(this)).prop( 'disabled', false ).attr( 'disabled', false );
+        app.incompleteOrder.lock = false;
+        clearTimeout(app.incompleteOrder.timer);
+    }
+
+};
+
+
+</script><script src="js/form.validate.js"></script>
+<script src="js/form.incomplete.js"></script>
+<script src="js/main2.js"></script>
+
+
+
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta property="og:image" content="images/img-to-share.png">
+   <title>XTactical Drone</title>
+   <link href="css/bootstrap.min.css" rel="stylesheet">
+   <link href="css/fontawesome-all.min.css" rel="stylesheet">
+   <link href="css/style.css" rel="stylesheet">
+   <link href="css/stylesheet.css" rel="stylesheet">
+   <!-- icons -->
+   <link rel="apple-touch-icon" sizes="57x57" href="images/apple-icon-57x57.png">
+   <link rel="apple-touch-icon" sizes="60x60" href="images/apple-icon-60x60.png">
+   <link rel="apple-touch-icon" sizes="72x72" href="images/apple-icon-72x72.png">
+   <link rel="apple-touch-icon" sizes="76x76" href="images/apple-icon-76x76.png">
+   <link rel="apple-touch-icon" sizes="114x114" href="images/apple-icon-114x114.png">
+   <link rel="apple-touch-icon" sizes="120x120" href="images/apple-icon-120x120.png">
+   <link rel="apple-touch-icon" sizes="144x144" href="images/apple-icon-144x144.png">
+   <link rel="apple-touch-icon" sizes="152x152" href="images/apple-icon-152x152.png">
+   <link rel="apple-touch-icon" sizes="180x180" href="images/apple-icon-180x180.png">
+   <link rel="icon" type="image/png" sizes="192x192" href="images/android-icon-192x192.png">
+   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+   <link rel="icon" type="image/png" sizes="96x96" href="images/favicon-96x96.png">
+   <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+   <link rel="manifest" href="./icons/manifest.json">
+   <meta name="msapplication-TileColor" content="#ffffff">
+   <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
+   <meta name="theme-color" content="#ffffff">
+   <!-- /icons -->
+   <link type="text/css" rel="stylesheet" charset="UTF-8" href="css/translateelement.css">
+</head>
+
+<body>
+   <nav id="tf-menu" class="navbar navbar-default navbar-fixed-top on">
+      <div class="container">
+         <!-- Brand and toggle get grouped for better mobile display -->
+         <div class="navbar-header">
+
+            <img class="img-logo" src="images/logo.png" alt="">
+         </div>
+
+         <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container-fluid -->
+   </nav>
+   <div id="tf-home" class="text-center">
+      <div class="overlay">
+         <div class="container">
+            <div class="content">
+               <div class="">
+                  <h1 class="h1 text-uppercase color-white mb-5">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;"> ΑΥΤΟ ΤΟ ΕΠΑΝΑΣΤΑΤΙΚΟ Drone ΤΡΑΒΑΕΙ ΤΑ ΚΑΛΥΤΕΡΑ ΒΙΝΤΕΟ
+                           ΚΑΙ ΔΙΑΤΗΡΕΙ ΣΤΗ ΜΝΗΜΗ ΤΙΣ Καλυτερες στιγμες ΤΗΣ ΖΩΗΣ ΣΑΣ! </font>
+                     </font><span class="color-yellow">
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">DRONE</font>
+                        </font>
+                     </span>
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;"> XTACTICAL</font>
+                     </font>
+                  </h1>
+                  <h3 class="h3 text-uppercase color-white fw-300 mt-0">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">ΚΑΤΑΓΡΑΨΤΕ ΚΑΛΥΤΕΡΕ ΣΤΙΓΜΕΣ ΣΑΣ</font>
+                     </font>
+                  </h3>
+                  <p class="color-light-gray container-min mt-25 mb-35">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">Το XTactical Drone είναι ένα drone που δημιουργήθηκε για
+                           να δημιουργήσει τα τέλεια βίντεο κατά την πτήση. Ο ελαφρύς αναδιπλούμενος σχεδιασμός του το
+                           κανει απαραίτητο μέρος κάθε περιπέτειας! </font>
+                        <font style="vertical-align: inherit;"> </font>
+                     </font>
+                  </p>
+                  <a href="#formawrap" class="btn order_button btn-order btn-custom btn_yellow text-uppercase mb-10">ΠΑΡΑΓΓΕΛΙΑ ΤΩΡΑ</a>
+
+               </div>
+               <img class="img-responsive mt-40" src="images/drone.png" alt="">
+               <ul class="featured_list mt-20">
+                  <li class="featured_block">
+                     <img class="img-responsive" src="images/big_logo.png" alt="">
+                  </li>
+               </ul>
+            </div>
+            <!-- /content -->
+         </div>
+      </div>
+   </div>
+   <!-- /Home Section -->
+   <div id="overview" class="text-center">
+      <div class="container">
+         <div class="wrapper-info">
+            <p class="fs-20 color-white mb-35">
+               <font style="vertical-align: inherit;">
+                  <font style="vertical-align: inherit;">Θαύμα της τεχνολογίας και του σχεδιασμού, το Drone XTactical
+                     σχεδιάστηκε για να είναι μαζί σας όπου κι αν σας ταξιδεύει η περιπέτεια. Κληρονομώντας τις
+                     καλύτερες ποιότητες της σειράς XTactical, αυτό το πτυσσόμενο, εξαιρετικά φορητό drone έχει την
+                     καλύτερη απόδοση και λειτουργικότητα πτήσης για να σας προσφέρει μια απίστευτη εμπειρία. </font>
+                  <font style="vertical-align: inherit;"></font>
+               </font>
+            </p>
+            <ul class="marvel_list flex">
+               <li class="marvel_block">
+                  <div class="marvel_content text-center">
+                     <img class="img-responsive mb-20" src="images/marvel-img-1.png" alt="">
+                     <p class="fs-20 color-white">
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">Άνετο</font>
+                        </font>
+                     </p>
+                  </div>
+               </li>
+               <li class="marvel_block">
+                  <div class="marvel_content text-center">
+                     <img class="img-responsive mb-20" src="images/marvel-img-2.png" alt="">
+                     <p class="fs-20 color-white">
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">Ανθεκτικό</font>
+                        </font>
+                     </p>
+                  </div>
+               </li>
+               <li class="marvel_block">
+                  <div class="marvel_content text-center">
+                     <img class="img-responsive mb-20" src="images/marvel-img-3.png" alt="">
+                     <p class="fs-20 color-white">
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">Σταθερό</font>
+                        </font>
+                     </p>
+                  </div>
+               </li>
+               <li class="marvel_block">
+                  <div class="marvel_content background-none text-center">
+                     <img class="img-responsive mb-20" src="images/marvel-img-4.png" alt="">
+                     <p class="fs-20 color-white">
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">Γρήγορο</font>
+                        </font>
+                     </p>
+                  </div>
+               </li>
+            </ul>
+         </div>
+         <!-- /wrapper-info -->
+      </div>
+   </div>
+   <!-- /overview -->
+   <div class="flex inner-overview clearfix">
+      <div class="left-block">
+         <div class="embed-responsive embed-responsive-16by9">
+            <iframe width="1193" height="672" src="d2IAhOs7VvQ.html" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+         </div>
+      </div>
+      <!-- /left-block -->
+      <div class="right-block text-left">
+         <div class="inner-right-block">
+            <p class="best-drone">
+               <font style="vertical-align: inherit;">
+                  <font style="vertical-align: inherit;">"Αυτό το drone είναι ένα από τα καλύτερα του είδους του στην
+                     αγορά: κανένα άλλο drone δεν συγκρίνεται ως προς την αξία για τα χρήματα. Το ευρύ φάσμα τρόπων
+                     πτήσης και ακρίβειας εντολών το τοποθετεί στο ίδιο επίπεδο με μερικά από τα πιο ακριβά μοντέλα,
+                     διατηρώντας μια απολύτως βολική τιμή "</font>
+               </font>
+            </p>
+            <div class="media">
+               <div class="media-left">
+                  <img class="media-object" src="images/user-img.png" alt="">
+               </div>
+               <div class="media-body va-middle">
+                  <p class="fw-600 text-uppercase">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">- Mike Freizer</font>
+                     </font>
+                  </p>
+                  <p class="pl-10">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">Ιδρυτής UltimateDroneMag</font>
+                     </font>
+                  </p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- /right-block -->
+   </div>
+   <!-- /inner-overview -->
+   <!-- Features Section ==========================================-->
+   <div id="features">
+      <div class="container">
+         <h1 class="h1 text-center text-uppercase color-white mb-50">
+            <font style="vertical-align: inherit;">
+               <font style="vertical-align: inherit;">Ποιο είναι το XTactical drone;</font>
+            </font>
+         </h1>
+         <div class="row">
+            <div class="col-sm-6 col-md-4">
+               <div class="what-is-block mb-50">
+                  <div class="media">
+                     <div class="media-left pr-30">
+                        <img class="media-object" src="images/what-is-img1.png" alt="">
+                     </div>
+                     <div class="media-body">
+                        <p class="fs-20 color-white fw-500 mb-20">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Drone plegable</font>
+                           </font>
+                        </p>
+                        <p class="color-light-gray">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Οι έλικες διπλώνονται προς τα μέσα, ώστε το drone
+                                 να μπορεί να μεταφερθεί πιο εύκολα και να προστατεύεται καλύτερα κατά τη μεταφορά.
+                              </font>
+                           </font>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <!-- /what-is-block -->
+               <div class="what-is-block mb-50">
+                  <div class="media">
+                     <div class="media-left pr-30">
+                        <img class="media-object" src="images/what-is-img2.png" alt="">
+                     </div>
+                     <div class="media-body">
+                        <p class="fs-20 color-white fw-500 mb-20">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Φωτογραφίες και βίντεο σε HD ποιότητα </font>
+                           </font>
+                        </p>
+                        <p class="color-light-gray">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Εγγραφή βίντεο υψηλής ευκρίνειας και λήψη
+                                 φωτογραφιών με ανάλυση έως 1080P</font>
+                           </font>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <!-- /what-is-block -->
+               <div class="what-is-block mb-50">
+                  <div class="media">
+                     <div class="media-left pr-30">
+                        <img class="media-object" src="images/what-is-img3.png" alt="">
+                     </div>
+                     <div class="media-body">
+                        <p class="fs-20 color-white fw-500 mb-20">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Μεγαλύτερος χρόνος πτήσης</font>
+                           </font>
+                        </p>
+                        <p class="color-light-gray">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Πετάξτε και τραβήξτε φωτογραφίες για έως και 30
+                                 λεπτά χωρίς να αγγίξετε το έδαφος ή να αλλάξετε μπαταρίες.</font>
+                           </font>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <!-- /what-is-block -->
+            </div>
+            <div class="col-sm-6 col-md-4 col-md-offset-4">
+               <div class="what-is-block mb-50">
+                  <div class="media">
+                     <div class="media-left pr-30">
+                        <img class="media-object" src="images/what-is-img4.png" alt="">
+                     </div>
+                     <div class="media-body">
+                        <p class="fs-20 color-white fw-500 mb-20">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Αισθητήρες εμποδίων</font>
+                           </font>
+                        </p>
+                        <p class="color-light-gray">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Οι αισθητήρες ανιχνεύουν το έδαφος και άλλα εμπόδια
+                                 και αλλάζουν αυτόματα την κατεύθυνση της πτήσης, για να αποφεύγουν συγκρούσεις.</font>
+                           </font>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <!-- /what-is-block -->
+               <div class="what-is-block mb-50">
+                  <div class="media">
+                     <div class="media-left pr-30">
+                        <img class="media-object" src="images/what-is-img5.png" alt="">
+                     </div>
+                     <div class="media-body">
+                        <p class="fs-20 color-white fw-500 mb-20">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Λειτουργία ζωντανης μεταδοσης</font>
+                           </font>
+                        </p>
+                        <p class="color-light-gray">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Πρόσβαση σε πραγματικό χρόνο στην κάμερα του drone
+                                 σας και παρακολούθηση της περιοχής σας.</font>
+                           </font>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <!-- /what-is-block -->
+               <div class="what-is-block mb-50">
+                  <div class="media">
+                     <div class="media-left pr-30">
+                        <img class="media-object" src="images/what-is-img6.png" alt="">
+                     </div>
+                     <div class="media-body">
+                        <p class="fs-20 color-white fw-500 mb-20">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Πανοραμική λειτουργία</font>
+                           </font>
+                        </p>
+                        <p class="color-light-gray">
+                           <font style="vertical-align: inherit;">
+                              <font style="vertical-align: inherit;">Τραβήξτε φωτογραφίες με 360 μοιρών απο ύψος με το
+                                 πάτημα ενός κουμπιού</font>
+                           </font>
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <!-- /what-is-block -->
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- /Features Section -->
+   <!-- Reviews Section ==========================================-->
+   <div id="reviews">
+      <div class="reviews-1">
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-6">
+                  <h1 class="h1 text-uppercase mb-30 mt-0">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">Πετάξτε πιο γρήγορα και περισσότερο</font>
+                     </font>
+                  </h1>
+                  <h4 class="h4 mb-50 lh-13">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">Το XTactical Drone είναι ένα από τα ταχύτερα drone του
+                           μεγέθους του, με μέγιστη απόσταση μετάδοσης έως και 1000 μέτρα.</font>
+                     </font>
+                  </h4>
+                  <div class="wrapper-stars">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                  </div>
+                  <div class="evaluation"><span>
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">5</font>
+                        </font>
+                     </span>
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;"> / </font>
+                     </font><span>
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">5</font>
+                        </font>
+                     </span>
+                  </div>
+                  <p class="mt-20 mb-20 lh-16">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">«Δοκιμάσαμε το XTactical drone πολλές φορές, ξεπερνώντας
+                           τα όριά του, αλλά καταφέραμε να διατηρήσουμε την τιμή προσιτή. </font>
+                        <font style="vertical-align: inherit;"></font>
+                     </font>
+                  </p>
+                  <p class="fw-600 text-uppercase">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">- </font>
+                     </font><span class="pl-10">
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">Jack Johnson</font>
+                        </font>
+                     </span>
+                  </p>
+                  <img src="images/varif.png" alt=""><span class="verif">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">Ελεγμένος Επαγγελμαατλιας/ερασιτέχνης</font>
+                     </font>
+                  </span>
+               </div>
+               <div class="col-sm-6 text-center">
+                  <img class="img-responsive mt-10" src="images/reviews-img-1.png" alt="">
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- /reviews-1 -->
+      <div class="reviews-2">
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-6 text-center">
+                  <img class="img-responsive text-center mt-10" src="images/reviews-img-2.png" alt="">
+               </div>
+               <div class="col-sm-6">
+                  <h1 class="h1 text-uppercase mb-30 color-white mt-0">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">ΕΥΚΟΛΟΣ ΕΛΕΓΧΟΣ</font>
+                     </font>
+                  </h1>
+                  <h4 class="h4 mb-50 color-light-gray">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">Το XTactical διαθέτει όλα τα απαραίτητα χαρακτηριστικά
+                           για να ικανοποιήσει τις προτιμήσεις των επαγγελματιών, αλλά είναι εξαιρετικά εύκολο στη χρήση
+                           και τον έλεγχο, ακόμη και για αρχάριους..</font>
+                     </font>
+                  </h4>
+                  <div class="wrapper-stars">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                  </div>
+                  <div class="evaluation"><span>
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">5</font>
+                        </font>
+                     </span>
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;"> / </font>
+                     </font><span>
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">5</font>
+                        </font>
+                     </span>
+                  </div>
+                  <p class="mt-20 mb-20 color-light-gray">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">"Γενικά είμαι εξαιρετικά προσεκτικός με τα γκάτζετ μου,
+                           αλλά αυτό το drone είναι τόσο απλό στη χρήση και έχει τόσα πολλά χαρακτηριστικά κατά της
+                           σύγκρουσης που το έβαλα στα χέρια του 8χρονου γιου μου αφού του έδειξα πώς να το δουλέψει
+                           κατά την πτήση.".</font>
+                     </font>
+                  </p>
+                  <p class="fw-600 text-uppercase">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">- </font>
+                     </font><span class="pl-10 color-light-gray">
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">Φρεντ Τέρνερ</font>
+                        </font>
+                     </span>
+                  </p>
+                  <p class="pl-20 mb-20 color-light-gray">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">Αεροναυτικός μηχανικός</font>
+                     </font>
+                  </p>
+                  <img src="images/varif.png" alt=""><span class="verif color-light-gray">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">Ελεγμένος ειδικός</font>
+                     </font>
+                  </span>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- /reviews-2 -->
+      <div class="reviews-3">
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-6">
+                  <h1 class="h1 text-uppercase mb-30 mt-0">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">ΚΑΝΤΕ ΕΠΑΓΓΕΛΜΑΤΙΚΕΣ ΦΩΤΟΓΡΑΦΙΕΣ</font>
+                     </font>
+                  </h1>
+                  <h4 class="h4 mb-50">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">Το Drone XTactical έρχεται με μια ενσωματωμένη κάμερα και
+                           προκαθορισμένες λειτουργίες, όπως οι λειτουργίες FOLLOW ME και GO HOME. Με αυτόν τον τρόπο,
+                           με το πάτημα ενός κουμπιού, ακόμη και άτομα με λιγότερες τεχνικές δεξιότητες μπορούν να
+                           κάνουν χρήση επαγγελματικής ποιότητας.</font>
+                     </font>
+                  </h4>
+                  <div class="wrapper-stars">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                     <img src="images/star.png" alt="">
+                  </div>
+                  <div class="evaluation"><span>
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">5</font>
+                        </font>
+                     </span>
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;"> / </font>
+                     </font><span>
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">5</font>
+                        </font>
+                     </span>
+                  </div>
+                  <p class="mt-20 mb-20 lh-16">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">"Αυτό το drone κάνει τις βιντεοσκοπήσεις και όλες οι
+                           προκαθορισμένες λειτουργίες να είναι τόσο διασκεδαστικές! </font>
+                        <font style="vertical-align: inherit;">Είναι πολύ ενδιαφέρον να δημιουργήσετε τα δικά σας
+                           βίντεο, τα οποία φαίνεται να βγήκαν κατευθείαν από μια ταινία δράσης και χρειάζονται μόνο
+                           λίγα δευτερόλεπτα για να δημιουργήσετε το δικό σας περιεχόμενο. "</font>
+                     </font>
+                  </p>
+                  <p class="fw-600 text-uppercase">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">- </font>
+                     </font><span class="pl-10">
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">Jimmy Gonzalez</font>
+                        </font>
+                     </span>
+                  </p>
+                  <p class="pl-20 mb-20">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">FlightBaseGuide.net</font>
+                     </font>
+                  </p>
+                  <img src="images/varif.png" alt=""><span class="verif">
+                     <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">Ελεγμένος ειδικός</font>
+                     </font>
+                  </span>
+               </div>
+               <div class="col-sm-6 text-center">
+                  <img class="img-responsive mt-10" src="images/reviews-img-3.png" alt="">
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- /reviews-3 -->
+
+      <!-- /rated -->
+   </div>
+   <!-- /Reviews Section -->
+   <!-- section-products Section ==========================================-->
+
+   <!-- /section-products Section -->
+   <div class="real-exp text-center" style="padding-top: 0">
+      <div class="container">
+         <h1 class="h1 text-uppercase mb-40">
+            <font style="vertical-align: inherit;">
+               <font style="vertical-align: inherit;">ΠΡΑΓΜΑΤΙΚΟ DRONE ΚΑΤΑΣΚΕΥΑΣΜΕΝΟ ΑΠΟ ΠΡΑΓΜΑΤΙΚΟΥΣ ΕΜΠΕΙΡΟΓΝΩΜΟΝΕΣ
+               </font>
+            </font>
+         </h1>
+         <div class="row">
+            <div class="flex">
+               <div class="col-sm-4 item-reviews">
+                  <div class="wrapper-real-img">
+                     <img class="img-responsive real-img mb-30" src="images/real-img-1.png" alt="">
+                     <p>
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">Μην ξεγελιέστε από το μέγεθός του · άνετο και ισχυρό,
+                              μπορεί να συγκριθεί με τις περισσότερες συσκευές που είναι δύο ή ακόμα και τρεις φορές
+                              ιδιο με το μέγεθος του κλασικού. Η τεχνολογία, με υψηλή ακρίβεια, το καθιστά ελαφρύ και
+                              εκπληκτικά ανθεκτικό. Θα έρθει πλήρης και με ανταλλακτικά, για κάθε περίπτωση, αλλά
+                              είμαστε σίγουροι ότι δεν θα τα χρειαστείτε!</font>
+                        </font>
+                     </p>
+                  </div>
+               </div>
+               <div class="col-sm-4 item-reviews">
+                  <div class="wrapper-real-img">
+                     <img class="img-responsive real-img mb-30" src="images/real-img-2.png" alt="">
+                     <p>
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;"> "Η ποιότητα του προϊόντος είναι απίστευτη, σε
+                              σύγκριση με την τιμή του. Αυτό σηματοδοτεί ένα σημείο καμπής στην πώληση τώρα. Με το
+                              XTactical, είναι πλέον σαφές ότι μπορείτε επί του παρόντος να αγοράσετε ένα drone υψηλής
+                              απόδοσης, με ένα μικρό μόνο μέρος του κόστους ορισμένων από τα καλύτερα μοντέλα της
+                              αγοράς. Τώρα αυτή η τεχνολογία είναι διαθέσιμη σε όλους και είμαι πολύ χαρούμενος με αυτό!
+                           </font>
+                        </font>
+                     </p>
+                  </div>
+               </div>
+               <div class="col-sm-4 item-reviews">
+                  <div class="wrapper-real-img border-none">
+                     <img class="img-responsive real-img mb-30" src="images/real-img-3.png" alt="">
+                     <p>
+                        <font style="vertical-align: inherit;">
+                           <font style="vertical-align: inherit;">«Προσπαθούμε πάντα, και ο καλύτερος τρόπος για να
+                              γνωρίζουν οι πελάτες μας τις περιπέτειες μας είναι μέσω βίντεο. Είχα άλλα drones τον
+                              τελευταίο χρόνο, αλλά μέχρι τώρα, ήταν πάντα πολύ περίπλοκα, υποδύναμα και πολύ εύθραυστα
+                              για να καταγράψουν Τα ταξίδια μου. Χάρη στο XTactical, έχουμε πλέον αλλάξει εντελώς τον
+                              τρόπο αποθήκευσης όλων των ταξιδιών μας και καταγράφουμε βίντεο επαγγελματικής ποιότητας
+                              με διπλάσια ταχύτητα! "</font>
+                        </font>
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <!-- /flex -->
+         </div>
+      </div>
+   </div>
+   <!-- /real-exp -->
+   <section id="order" class="grayMesh_light">
+
+      <div style="background: white">
+         <img src="images/l6.jpg" style="width: 100%;
+    max-width: 700px;
+    padding: 50px 15px;
+    display: block;
+    margin: auto;">
+         <div style="padding: 0 15px">
+            <p style="    padding: 15px;
+    border: 3px dotted #89cf2e;
+    border-radius: 20px;
+    font-size: 22px;
+    text-align: center;
+    max-width: 500px;
+    margin: auto;"><b>
+                  <font style="vertical-align: inherit;">
+                     <font style="vertical-align: inherit;">ΠΡΟΣΦΟΡΑ 2020</font>
+                  </font>
+               </b>
+               <font style="vertical-align: inherit;">
+                  <font style="vertical-align: inherit;"> Το Drone XTactical διατίθεται με δωρεάν παράδοση στην Ελλάδα
+                     για περιορισμένο χρονικό διάστημα! Βιαστείτε, η προσφορά θα λήξει σύντομα! </font>
+                  <font style="vertical-align: inherit;"></font>
+               </font>
+            </p>
+         </div>
+      </div>
+      <style>
+         .forma {
+            max-width: 450px;
+            margin: 0 auto;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            line-height: 1.5;
+            color: #212529;
+            font-size: 16px;
+         }
+
+         .forma h3 {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 0 12px 0;
+         }
+
+         .forma img {
+            max-width: 100%;
+            max-height: 80px;
+         }
+
+         .forma .form-group {
+            margin-bottom: 16px;
+         }
+
+         .forma label {
+            display: inline-block;
+            margin-bottom: 8px;
+         }
+
+         .forma .form-control {
+            display: block;
+            width: 100%;
+            padding: 6px 12px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+         }
+
+         .forma .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+         }
+
+         .forma .form-row {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            margin-right: -5px;
+            margin-left: -5px;
+         }
+
+         .forma .form-row>.col,
+         .forma .form-row>[class*=col-] {
+            padding-right: 5px;
+            padding-left: 5px;
+         }
+
+         .forma .col-md-8 {
+            -webkit-box-flex: 0;
+            -ms-flex: 0 0 66.666667%;
+            flex: 0 0 66.666667%;
+            max-width: 66.666667%;
+         }
+
+         .forma .col-md-4 {
+            -webkit-box-flex: 0;
+            -ms-flex: 0 0 33.333333%;
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+         }
+
+         .forma *,
+         .forma::after,
+         .forma::before {
+            box-sizing: border-box;
+         }
+
+         .forma .col {
+            -ms-flex-preferred-size: 0;
+            flex-basis: 0;
+            -webkit-box-flex: 1;
+            -ms-flex-positive: 1;
+            flex-grow: 1;
+            max-width: 100%;
+            position: relative;
+            width: 100%;
+            min-height: 1px;
+         }
+
+         .forma span {
+            color: black;
+            padding: 4px 10px;
+            background: #ffc205;
+            font-weight: bold;
+            border-radius: 5px;
+         }
+
+         .forma span img {
+            height: 25px;
+            vertical-align: bottom;
+            padding-right: 3px;
+         }
+
+         .forma .delivery {
+            text-align: center;
+            margin: 10px 0 16px;
+         }
+
+         .forma .info-privacy {
+            font-size: 13px;
+            text-align: center;
+         }
+
+         .forma .info-privacy a {
+            color: #007bff;
+            text-decoration: none;
+         }
+
+         .forma button {
+            padding: 12px 20px;
+            margin: auto;
+            text-transform: uppercase;
+            display: block;
+            text-decoration: none;
+            outline: none;
+            font-weight: bold;
+            font-size: 22px;
+            color: #ffffff;
+            text-align: center;
+            background: linear-gradient(to top, #75af27, #89cf2e);
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 7px 0 #56831c;
+            cursor: pointer;
+            margin-top: 14px;
+         }
+
+         .forma button:hover {
+            background: linear-gradient(to top, #75BA27, #89D92E);
+         }
+
+         .formawrap {
+            background: white;
+            padding: 45px 15px;
+         }
+      </style>
+
+      <div class="formawrap" id="formawrap">
+         <form method="post" action="https://healthbestblog.space/cpatl/api.php" class="forma">
+            <center>
+               <h3>
+                  <font style="vertical-align: inherit;">
+                     <font style="vertical-align: inherit;">Συμπληρώστε την αίτηση</font>
+                  </font>
+               </h3>
+            </center>
+            <center>
+               <h4 style="    margin-bottom: 20px;">
+                  <font style="vertical-align: inherit;">
+                     <font style="vertical-align: inherit;">Drone XTactical (<del><x-oldprice>198</x-oldprice> <x-currency>€</x-currency></del>  <x-newprice>99</x-newprice>                        <x-currency>€</x-currency>)</font>
+                  </font>
+               </h4>
+            </center>
+               
+    <select name="offer" class="form-control country_chang" style="display: none;">
+        <option data-country-code="GR" selected="selected" value="22463">
+            Греция        </option>
+    </select>
+
+                <div class="form-group">
+               <label>
+                  <font style="vertical-align: inherit;">
+                     <font style="vertical-align: inherit;">Όνομα και Επώνημο</font>
+                  </font>
+               </label>
+               <input type="text" name="name" class="form-control" placeholder="" required="required">
+            </div>
+            <div class="form-group">
+               <label>
+                  <font style="vertical-align: inherit;">
+                     <font style="vertical-align: inherit;">Τηλέφωνο επικοινωνίας</font>
+                  </font>
+               </label>
+               <input type="tel" name="phone" class="form-control" placeholder="" required="required">
+            </div>
+
+
+
+
+
+            <button class="submit-button" type="submit">
+               <font style="vertical-align: inherit;">
+                  <font style="vertical-align: inherit;">Παραγγελια τώρα</font>
+               </font>
+            </button>
+                      <input type="hidden" name="stream_hid" value="5pytrJW9">
+      <input type="hidden" name="offer_id" value="3487">
+
+      
+      <input type="hidden" name="country" value="GR"> 
+
+      <input type="hidden" name="sid1" value="alex">
+      <input type="hidden" name="sid2" value="alex2">
+      <input type="hidden" name="sid3" value="alex3">
+      <input type="hidden" name="redirect_url" value="https://amazinghealth.github.io/germitox-ita/success/index.html">
+         </form>
+      </div>
+
+      <script src="js/jquery-3.3.1.min.js"></script>
+
+      <script src="js/fingerprint2.min.js"></script>
+      <script src="js/ekko-lightbox.min.js"></script>
+
+
+
+   </section>
+
+
+
+   <script src="js/bootstrap.min.js"></script>
+<center><p>OOO "OSTROV PRODAZH" OGRN: 1197746695530 VAT: 7708365555</p>
+<p>129090, Moscow, pereulok Zhivarev, house 8, stroenie 3, flat 16 email: ostrov.prodazh@mail.com Skype: ostrov.prodazh@mail.com</p> 
+
+
+    
+            <p class="conf-link doclinks">
+        <a class="nav-link" href="" onclick="window.open('/policy_en.php'); return false;">Privacy Policy</a>
+          |
+        <a class="nav-link" href="" onclick="window.open('/terms_en.php'); return false;">Terms & Conditions</a>
+      </p>
+      
+    
+</center>
+</body>
+
+</html>
